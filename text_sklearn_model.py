@@ -14,12 +14,5 @@ class TextModel:
         query_embedding = self.vectorizer.transform([question]).toarray()
         similarities = cosine_similarity(self.embeddings_text, query_embedding).flatten()
         sorted_indices = np.argsort(similarities)[::-1]
-
-        result = []
-        for i in sorted_indices:
-            if similarities[i] > 0:
-                result.append(self.cleaned_text[i])
-                if len(result) == nAnswers:
-                    break
-        
+        result = [self.cleaned_text[i] for i in sorted_indices[:nAnswers] if similarities[i] > 0]
         return result
